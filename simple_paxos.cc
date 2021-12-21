@@ -19,6 +19,7 @@ static void shuffle(deque<T> &dq) {
     static random_device rd;
     static mt19937 g(rd());
     shuffle(dq.begin(), dq.end(), g);
+    // random_shuffle(dq.begin(), dq.end());
 }
 
 void net_trans() {
@@ -87,7 +88,7 @@ public:
                     prepare_dq.push_back(acceptor);
                     continue;
                 }
-                if (accepted_proposal > n) break;
+                if (accepted_proposal > n) continue;
                 if (accepted_proposal > max_accept_proposal) v = accepted_value;
                 if (++promise_num >= f) break;
             }
@@ -120,17 +121,14 @@ public:
 private:
     int id_;
 
-    static int assign_no;
-    static mutex mtx;
+    inline static int assign_no = 1;
+    inline static mutex mtx;
 
     static int get_assign_n() {
         lock_guard<mutex> locker(mtx);
         return assign_no++;
     }
 };
-
-int Proposer::assign_no = 1;
-mutex Proposer::mtx;
 
 int main() {
     int acceptor_num = 5;
