@@ -89,7 +89,10 @@ public:
                     continue;
                 }
                 if (accepted_proposal > n) continue;
-                if (accepted_proposal > max_accept_proposal) v = accepted_value;
+                if (accepted_proposal > max_accept_proposal) {
+                    max_accept_proposal = accepted_proposal;
+                    v = accepted_value;
+                }
                 if (++promise_num >= f) break;
             }
             if (promise_num < f) continue;
@@ -107,7 +110,7 @@ public:
                     accept_dq.push_back(acceptor);
                     continue;
                 }
-                if (min_proposal > n) break;
+                if (min_proposal > n) continue;
                 if (++accept_num >= f) break;
             }
 
@@ -131,7 +134,7 @@ private:
 };
 
 int main() {
-    int acceptor_num = 5;
+    int acceptor_num = 20;
     int proposer_num = 2;
     vector<shared_ptr<Acceptor>> acceptors;
     for (int i = 0; i < acceptor_num; ++i) {
@@ -149,7 +152,7 @@ int main() {
 
     unordered_map<int, int> ump;
     for (auto acceptor : acceptors) {
-        printf("accpetor %d chosen [n=%d, v=%d]\n", acceptor->get_id(),
+        printf("accpetor %d accept [n=%d, v=%d]\n", acceptor->get_id(),
                acceptor->get_n(), acceptor->get_v());
         ++ump[acceptor->get_v()];
     }
